@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico de Carreira — Protocolo Interno</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0F2647;
+  --navy-mid: #1B3A6B;
+  --orange: #E87722;
+  --orange-light: #FF9A45;
+  --cream: #F9F6F1;
+  --gray: #6B7280;
+  --white: #FFFFFF;
+  --text: #1A1A2E;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ── SCREENS ── */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: block; }
+
+/* ══════════════════════════════════════
+   INTRO
+══════════════════════════════════════ */
+#screen-intro {
+  background: var(--navy);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+.intro-stripe {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 5px;
+  background: var(--orange);
+}
+.intro-bg {
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    45deg, transparent, transparent 40px,
+    rgba(232,119,34,0.04) 40px,
+    rgba(232,119,34,0.04) 41px
+  );
+  pointer-events: none;
+}
+.intro-top {
+  position: relative;
+  padding: 28px 28px 0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.brand-tag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--orange); font-weight: 600;
+}
+.anon-tag {
+  font-size: 10px; color: rgba(255,255,255,0.3);
+  letter-spacing: 1px;
+}
+.intro-body {
+  position: relative;
+  flex: 1;
+  padding: 48px 28px 0;
+  display: flex; flex-direction: column; justify-content: center;
+  max-width: 560px;
+}
+.intro-eyebrow {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 16px; font-weight: 600;
+  display: flex; align-items: center; gap: 10px;
+}
+.intro-eyebrow::before {
+  content: ''; display: block;
+  width: 28px; height: 2px; background: var(--orange);
+}
+.intro-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 13vw, 76px);
+  line-height: 0.93;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+.intro-title .accent { color: var(--orange); }
+.intro-desc {
+  font-size: 15px; line-height: 1.65;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 12px;
+  max-width: 340px;
+}
+.intro-divider {
+  width: 40px; height: 3px;
+  background: var(--orange);
+  margin: 20px 0 20px;
+}
+.intro-meta {
+  display: flex; gap: 20px; flex-wrap: wrap;
+}
+.meta-item {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,0.4); font-weight: 600;
+}
+.meta-item strong { color: var(--orange); }
+.intro-bottom {
+  position: relative;
+  padding: 32px 28px 44px;
+}
+.btn-start {
+  display: block; width: 100%;
+  background: var(--orange);
+  color: var(--white);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+  padding: 18px 24px;
+  border: none; border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.btn-start:active { transform: scale(0.98); opacity: 0.9; }
+.intro-hint {
+  text-align: center; margin-top: 12px;
+  font-size: 12px; color: rgba(255,255,255,0.25);
+  letter-spacing: 0.5px;
+}
+
+/* ══════════════════════════════════════
+   QUIZ
+══════════════════════════════════════ */
+#screen-quiz { background: var(--cream); }
+
+.quiz-header {
+  background: var(--navy);
+  padding: 32px 24px 44px;
+  position: relative; overflow: hidden;
+}
+.quiz-header::after {
+  content: '';
+  position: absolute; bottom: -1px; left: 0; right: 0;
+  height: 32px;
+  background: var(--cream);
+  clip-path: ellipse(60% 100% at 50% 100%);
+}
+.quiz-step-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 8px; font-weight: 600;
+}
+.quiz-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 34px; color: var(--white); line-height: 1.1;
+}
+.quiz-desc {
+  margin-top: 10px; font-size: 14px;
+  color: rgba(255,255,255,0.55); line-height: 1.6;
+}
+.progress-bar {
+  margin-top: 20px;
+  height: 3px; background: rgba(255,255,255,0.12); border-radius: 2px;
+}
+.progress-fill {
+  height: 100%; background: var(--orange); border-radius: 2px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+.quiz-body { padding: 32px 24px 48px; }
+
+.question-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gray); margin-bottom: 8px; font-weight: 600;
+}
+.question-text {
+  font-size: 18px; font-weight: 700; line-height: 1.4;
+  color: var(--navy); margin-bottom: 24px;
+}
+.option-btn {
+  display: block; width: 100%;
+  background: var(--white);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Barlow', sans-serif;
+  font-size: 15px; color: var(--text);
+  line-height: 1.4;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.option-btn:hover { border-color: var(--orange); transform: translateX(4px); }
+.option-btn.selected {
+  border-color: var(--orange);
+  background: #FFF6EE;
+  color: var(--navy);
+  font-weight: 600;
+}
+.option-letter {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; color: var(--orange);
+  margin-right: 8px;
+}
+
+/* ══════════════════════════════════════
+   RESULTADO
+══════════════════════════════════════ */
+#screen-result { background: var(--cream); }
+
+.result-header {
+  background: var(--navy);
+  padding: 52px 24px 60px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.result-header::after {
+  content: '';
+  position: absolute; bottom: -1px; left: 0; right: 0;
+  height: 32px;
+  background: var(--cream);
+  clip-path: ellipse(60% 100% at 50% 100%);
+}
+.result-icon {
+  font-size: 52px; margin-bottom: 16px;
+  display: block;
+}
+.result-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 8px; font-weight: 600;
+}
+.result-phase {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 44px; color: var(--white); line-height: 1;
+}
+.result-score {
+  margin-top: 10px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; letter-spacing: 1px;
+  color: rgba(255,255,255,0.35);
+}
+.result-desc {
+  margin-top: 14px; font-size: 14px;
+  color: rgba(255,255,255,0.65); line-height: 1.65;
+  max-width: 300px; margin-left: auto; margin-right: auto;
+}
+
+.result-body { padding: 32px 24px 16px; }
+
+.result-focus-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 16px; font-weight: 600;
+}
+.focus-card {
+  background: var(--white);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  display: flex; align-items: flex-start; gap: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.focus-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px; color: var(--orange); line-height: 1;
+  min-width: 28px;
+}
+.focus-text {
+  font-size: 14px; line-height: 1.5;
+  color: var(--navy); font-weight: 500;
+}
+
+/* CTA */
+.result-cta {
+  padding: 24px 24px 48px;
+}
+.cta-card {
+  background: var(--navy);
+  border-radius: 12px;
+  padding: 32px 24px;
+  text-align: center;
+}
+.cta-eyebrow {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 12px; font-weight: 600;
+}
+.cta-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px; color: var(--white); line-height: 1.1;
+  margin-bottom: 12px;
+}
+.cta-desc {
+  font-size: 14px; color: rgba(255,255,255,0.55);
+  line-height: 1.6; margin-bottom: 24px;
+}
+.cta-price {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,0.3); margin-bottom: 20px;
+}
+.cta-price strong {
+  font-size: 28px; color: var(--white);
+  font-weight: 700; letter-spacing: 0;
+}
+.btn-cta {
+  display: block; width: 100%;
+  background: var(--orange);
+  color: var(--white);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+  padding: 18px 24px;
+  border: none; border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.2s;
+  display: block;
+}
+.btn-cta:active { transform: scale(0.98); opacity: 0.9; }
+
+.btn-restart {
+  display: block; width: 100%;
+  background: transparent;
+  color: rgba(255,255,255,0.35);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: all 0.2s;
+}
+.btn-restart:hover { color: rgba(255,255,255,0.6); border-color: rgba(255,255,255,0.2); }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     INTRO
+══════════════════════════════════════ -->
+<div id="screen-intro" class="screen active">
+  <div class="intro-stripe"></div>
+  <div class="intro-bg"></div>
+  <div class="intro-top">
+    <span class="brand-tag">Protocolo Interno</span>
+    <span class="anon-tag">O Infiltrado</span>
+  </div>
+  <div class="intro-body">
+    <div class="intro-eyebrow">Diagnóstico de Carreira</div>
+    <div class="intro-title">Onde você<br>está <span class="accent">agora?</span></div>
+    <div class="intro-desc">
+      10 perguntas que identificam sua fase atual e o que está travando sua progressão.
+    </div>
+    <div class="intro-divider"></div>
+    <div class="intro-meta">
+      <span class="meta-item"><strong>10</strong> perguntas</span>
+      <span class="meta-item"><strong>3</strong> minutos</span>
+      <span class="meta-item"><strong>Gratuito</strong></span>
+    </div>
+  </div>
+  <div class="intro-bottom">
+    <button class="btn-start" onclick="startQuiz()">Iniciar diagnóstico →</button>
+    <div class="intro-hint">Sem cadastro. Resultado imediato.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     QUIZ
+══════════════════════════════════════ -->
+<div id="screen-quiz" class="screen">
+  <div class="quiz-header">
+    <div class="quiz-step-label">Diagnóstico de Carreira</div>
+    <div class="quiz-title">Onde você está agora?</div>
+    <div class="quiz-desc">Responda com honestidade. Não tem resposta certa — tem resposta sua.</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+  </div>
+  <div class="quiz-body" id="quiz-body"></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     RESULTADO
+══════════════════════════════════════ -->
+<div id="screen-result" class="screen">
+  <div class="result-header">
+    <span class="result-icon" id="result-icon">🔧</span>
+    <div class="result-label">Sua fase atual</div>
+    <div class="result-phase" id="result-phase">—</div>
+    <div class="result-score" id="result-score"></div>
+    <div class="result-desc" id="result-desc"></div>
+  </div>
+  <div class="result-body">
+    <div class="result-focus-title">Onde focar agora</div>
+    <div id="result-focus-cards"></div>
+  </div>
+  <div class="result-cta">
+    <div class="cta-card">
+      <div class="cta-eyebrow">Próximo passo</div>
+      <div class="cta-title">Do Operacional<br>à Liderança</div>
+      <div class="cta-desc">9 capítulos com o método completo — o que funcionou e que a empresa prefere que você não saiba.</div>
+      <div class="cta-price">Acesso imediato por apenas <strong>R$&nbsp;37</strong></div>
+      <a class="btn-cta" href="https://kiwify.app/AIn7yd7" target="_blank">Quero o e-book →</a>
+      <button class="btn-restart" onclick="restart()">↩ Refazer o diagnóstico</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ──────────────────────────────────────────────
+// DATA
+// ──────────────────────────────────────────────
+const QUIZ = [
+  {
+    q: "Quando aparece um problema no seu setor que não é diretamente sua responsabilidade, o que você faz?",
+    opts: [
+      { t: "Aviso quem é responsável e sigo meu trabalho.", pts: 0 },
+      { t: "Fico de olho, mas não me envolvo muito.", pts: 1 },
+      { t: "Tento entender o problema e ofereço ajuda.", pts: 2 },
+      { t: "Mergulho no problema e proponho uma solução.", pts: 3 }
+    ]
+  },
+  {
+    q: "Como você enxerga a meta do seu supervisor ou líder?",
+    opts: [
+      { t: "É problema dele, não meu.", pts: 0 },
+      { t: "Conheço vagamente, mas foco na minha.", pts: 1 },
+      { t: "Entendo como minha entrega impacta a dele.", pts: 2 },
+      { t: "Ajo pensando primeiro na meta dele, depois na minha.", pts: 3 }
+    ]
+  },
+  {
+    q: "Qual das frases mais descreve como você lida com tarefas que você não gosta?",
+    opts: [
+      { t: "Faço o mínimo para passar.", pts: 0 },
+      { t: "Faço direito, mas sem entusiasmo.", pts: 1 },
+      { t: "Faço bem feito porque me importo com minha imagem.", pts: 2 },
+      { t: "Tento ser o melhor nisso para sair dali mais rápido.", pts: 3 }
+    ]
+  },
+  {
+    q: "Como é sua organização do dia de trabalho?",
+    opts: [
+      { t: "Vou fazendo o que aparece.", pts: 0 },
+      { t: "Tenho uma ideia geral do que fazer.", pts: 1 },
+      { t: "Planejo as prioridades no início do turno.", pts: 2 },
+      { t: "Tenho blocos definidos: básico, acompanhamento e iniciativas.", pts: 3 }
+    ]
+  },
+  {
+    q: "Na última semana, você fez algo que não estava na sua obrigação mas que beneficiou o time?",
+    opts: [
+      { t: "Não — não é minha função.", pts: 0 },
+      { t: "Talvez, não lembro de nada específico.", pts: 1 },
+      { t: "Sim, uma coisa pequena.", pts: 2 },
+      { t: "Sim, proativamente e mais de uma vez.", pts: 3 }
+    ]
+  },
+  {
+    q: "Como você se relaciona com as pessoas de outros turnos ou setores?",
+    opts: [
+      { t: "Mal — cada um no seu quadrado.", pts: 0 },
+      { t: "Educado, mas sem muito contato.", pts: 1 },
+      { t: "Tenho bom relacionamento e colaboro quando preciso.", pts: 2 },
+      { t: "Enxergo a operação como um todo e me envolvo ativamente.", pts: 3 }
+    ]
+  },
+  {
+    q: "Você sabe o que as pessoas um nível acima de você fazem no dia a dia?",
+    opts: [
+      { t: "Não tenho ideia.", pts: 0 },
+      { t: "Tenho uma ideia superficial.", pts: 1 },
+      { t: "Conheço as principais responsabilidades.", pts: 2 },
+      { t: "Sei em detalhes e já aprendi ferramentas que eles usam.", pts: 3 }
+    ]
+  },
+  {
+    q: "Quando comete um erro no trabalho, como você reage?",
+    opts: [
+      { t: "Torço para ninguém perceber.", pts: 0 },
+      { t: "Admito se me perguntarem, mas não falo por conta.", pts: 1 },
+      { t: "Admito, corrijo e sigo.", pts: 2 },
+      { t: "Admito, corrijo, entendo a causa e proponho como evitar no futuro.", pts: 3 }
+    ]
+  },
+  {
+    q: "Com que frequência você pensa em como pode crescer na empresa?",
+    opts: [
+      { t: "Raramente — foco em passar o dia.", pts: 0 },
+      { t: "Às vezes, mas sem ação concreta.", pts: 1 },
+      { t: "Frequentemente e já tomei algumas ações.", pts: 2 },
+      { t: "É uma mentalidade constante que guia minhas escolhas diárias.", pts: 3 }
+    ]
+  },
+  {
+    q: "Como você avalia sua imagem profissional no trabalho?",
+    opts: [
+      { t: "Não me preocupo muito com isso.", pts: 0 },
+      { t: "Sou visto como alguém que cumpre o que tem que cumprir.", pts: 1 },
+      { t: "Sou reconhecido como um bom profissional.", pts: 2 },
+      { t: "Sou visto como referência — pessoas me perguntam coisas e líderes me observam.", pts: 3 }
+    ]
+  }
+];
+
+const PHASES = [
+  {
+    min: 0, max: 9,
+    icon: "🔧", name: "Executor",
+    desc: "Você está no começo da jornada. Faz o que precisa, mas ainda opera no modo reativo. A boa notícia: você tem tudo para mudar isso agora.",
+    focus: [
+      "Entender por que fazer o mínimo trava seu crescimento",
+      "Desenvolver o hábito de enxergar além do seu turno",
+      "Aprender a se tornar visível sem precisar falar alto"
+    ]
+  },
+  {
+    min: 10, max: 19,
+    icon: "⚙️", name: "Em Transição",
+    desc: "Você já percebeu que precisa fazer mais do que o básico — mas ainda está descobrindo como. Está no momento mais importante da carreira.",
+    focus: [
+      "Organizar o dia para criar espaço para iniciativas",
+      "Entender como a meta do seu chefe se conecta com a sua",
+      "Começar a construir visibilidade de forma inteligente"
+    ]
+  },
+  {
+    min: 20, max: 27,
+    icon: "📈", name: "Estrategista Emergente",
+    desc: "Você já opera em outro nível. Pensa no todo, age com método e começa a ser reconhecido. O próximo passo é consolidar e escalar.",
+    focus: [
+      "Aplicar o Método dos 4 Trimestres com precisão",
+      "Desenvolver seu filtro humano de aprendizado",
+      "Posicionar-se para o próximo cargo com dados e consistência"
+    ]
+  },
+  {
+    min: 28, max: 30,
+    icon: "🚀", name: "Liderança Emergente",
+    desc: "Você já pensa como líder mesmo sem o cargo. Sua mentalidade está alinhada — agora é hora de consolidar e se posicionar para o próximo passo.",
+    focus: [
+      "Refinar seu método de liderança e multiplicação de time",
+      "Aprender a usar o mercado como termômetro do seu valor",
+      "Construir seu portfólio de entregas para o próximo cargo"
+    ]
+  }
+];
+
+// ──────────────────────────────────────────────
+// STATE
+// ──────────────────────────────────────────────
+let quizAnswers = [];
+let quizScore = 0;
+let currentQ = 0;
+
+// ──────────────────────────────────────────────
+// NAVIGATION
+// ──────────────────────────────────────────────
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ──────────────────────────────────────────────
+// QUIZ
+// ──────────────────────────────────────────────
+function startQuiz() {
+  currentQ = 0;
+  quizAnswers = [];
+  quizScore = 0;
+  renderQuestion();
+  goTo('screen-quiz');
+}
+
+function renderQuestion() {
+  const q = QUIZ[currentQ];
+  const pct = Math.round((currentQ / QUIZ.length) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+
+  const letters = ['A', 'B', 'C', 'D'];
+  document.getElementById('quiz-body').innerHTML = `
+    <div class="question-num">Pergunta ${currentQ + 1} de ${QUIZ.length}</div>
+    <div class="question-text">${q.q}</div>
+    ${q.opts.map((o, i) => `
+      <button class="option-btn" onclick="selectOpt(this, ${o.pts})">
+        <span class="option-letter">${letters[i]}.</span>${o.t}
+      </button>
+    `).join('')}
+  `;
+}
+
+function selectOpt(btn, pts) {
+  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  quizAnswers[currentQ] = pts;
+
+  setTimeout(() => {
+    currentQ++;
+    if (currentQ < QUIZ.length) {
+      renderQuestion();
+    } else {
+      finishQuiz();
+    }
+  }, 380);
+}
+
+function finishQuiz() {
+  quizScore = quizAnswers.reduce((a, b) => a + b, 0);
+  const phase = PHASES.find(p => quizScore >= p.min && quizScore <= p.max);
+  showResult(phase);
+}
+
+function showResult(phase) {
+  document.getElementById('result-icon').textContent = phase.icon;
+  document.getElementById('result-phase').textContent = phase.name;
+  document.getElementById('result-score').textContent = `Pontuação: ${quizScore} de 30`;
+  document.getElementById('result-desc').textContent = phase.desc;
+
+  document.getElementById('result-focus-cards').innerHTML = phase.focus.map((f, i) => `
+    <div class="focus-card">
+      <div class="focus-num">0${i + 1}</div>
+      <div class="focus-text">${f}</div>
+    </div>
+  `).join('');
+
+  goTo('screen-result');
+}
+
+function restart() {
+  startQuiz();
+}
+</script>
+</body>
+</html>
